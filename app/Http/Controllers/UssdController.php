@@ -70,11 +70,6 @@ class UssdController extends Controller
 }
 
 
-    private function currentVariable($ussdTemplate){
-
-
-    }
-
     // format variable to show to user base on input type
     private function formatVariableDisplay($optionsItems)
     {
@@ -103,16 +98,6 @@ class UssdController extends Controller
         return $displays;
     }
 
-    // validate response from user
-    private function checkUssdResponse($response)
-    {
-
-    }
-
-    private function nextVariable()
-    {
-
-    }
 
     // save history
     private function saveVariableHistory($userid,Request $request,$ussdHistory)
@@ -228,16 +213,13 @@ class UssdController extends Controller
             }else{
                 $order_Var_id = $findNext->next_variable->order_in_variable;
             }
-            // echo 'Order '.$order_Var_id;
 
             // loop through all event variable and find the next variable by variable order numb.
             foreach($findNext->var_history as $history)
             {
 
-                // hidde if skip is false
 
                 // TODO check to see if you will maintain it
-
                 
                 // find the next ordered variable and save it as the next 
                 if($order_Var_id==$history->order_in_variable)
@@ -249,32 +231,9 @@ class UssdController extends Controller
                     $findNext = $this->findUserSession($request,$userId);
                     break;
                     
-                }
-                // else if($order_Var_id> count($findNext->var_history)){
-                //     dd('IS GREATER');
-                //     $next_variable =  $findNext['var_history'];
-                //     break;
-                // }
-              
+                }  
                
-                // 1. enter code
-                // .1 sort variable using the order_in_variable in acending order.
-                // .2 if is FIRST time choose the the 0 index that wil be the first in the list.
-                // .3 then add the next variable to the current._field in the user session 
-                // 2. check current variable to display
-                // 2.2 check if that variable is hidden and skip to the next. 
-                // 2.1 check the variable input type and display in that order.
-                // 2.3 if tht variable is single input_type check the options for for type and a skip to.. 
-                // 3. choose selection or cutom enter value.
-                // 4. 
 
-                // if(!$history->hidden_text)
-                // {
-                //     // check if length
-                //     if(count($history)>$currentVariableNumber){
-                        
-                //     }
-                // }
             }
            
         }
@@ -431,15 +390,8 @@ class UssdController extends Controller
 
     }
     
-
-    // update current variable
-
-    private function updateCurrentVariable($userId)
-    {
-
-    }
 // update history
-    private function updateVartDB(Request $request,$userId,$nextVar=null,$current=null,$response=null)
+    private function updateVartDB(Request $request,$userId,$nextVar=null,$current=null,$response=null,$errorMessages=null)
     {
         $userSession = $request->session()->get($userId);
         if($userSession)
@@ -485,6 +437,15 @@ class UssdController extends Controller
             }
 
         }
+
+        // error messages
+        if($error != null)
+        {
+            // system messages Keyes ['END','START','ERROR']
+            $userSessions['error_messages'] = $error;
+
+        }
+
         // save  to session by userid
         $request->session()->put($userId,json_decode(json_encode($userSessions)));
 
