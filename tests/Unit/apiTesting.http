@@ -1,0 +1,207 @@
+POST http://localhost:8000/api/ussd
+content-type: application/json
+
+{
+  "USERID": "cogsys",
+  "MSISDN": "233001001",
+  "USERDATA": "2",
+  "MSGTYPE": false
+}
+###
+POST http://localhost:8000/api/ussd/variable/create
+content-type: application/json
+
+    {
+          "event_id": 1,
+          "user_id":1,
+          "name": "intro",
+          "description": "For Help call :sysName\nWelcome to the :eventName donation\nservice",
+          "input_type": "single",
+          "hidden_text": false,
+          "required": 1,
+          "options": {
+            "type": "int",
+            "items": [
+              {
+                "id": 1,
+                "label": "Donate",
+                "value": "1"
+              },
+              {
+                "id": 2,
+                "label": "Exit",
+                "value": "2"
+              }
+            ]
+          },
+          "order_in_variable": 1,
+          "default_value": "",
+          "min_length": 0,
+          "max_length": 50
+  }
+
+###2
+POST http://localhost:8000/api/ussd/variable/create
+content-type: application/json
+
+{
+          "name": "payment_channel",
+          "event_id":1,
+          "user_id":1,
+          "description": "Please select the donation:",
+          "input_type": "single",
+          "hidden_text": false,
+          "required": 1,
+          "options": {
+            "type": "int",
+            "items": [
+              {
+                "id": 1,
+                "label": " Mobile Money",
+                "value": "1",
+                "skip": ""
+              },
+              {
+                "id": 2,
+                "label": "Bank Deposit",
+                "value": "2",
+                "skip": ""
+              }
+            ]
+          },
+          "order_in_variable": 2,
+          "min_length": 0,
+          "max_length": 50
+}
+
+###3
+POST http://localhost:8000/api/ussd/variable/create
+content-type: application/json
+
+{
+          "name": "payment_amount",
+          "event_id":1,
+          "user_id":1,
+          "description": "Please enter the amount you wish to donate",
+          "input_type": "single",
+          "hidden_text": false,
+          "required": 1,
+          "options": {
+            "type": "int",
+            "items": [
+              {
+                "id": 1,
+                "label": "50",
+                "value": 50,
+                "skip": "procede_payment"
+              },
+              {
+                "id": 2,
+                "label": "100",
+                "value": 100,
+                "skip": "procede_payment"
+              },
+               {
+                "id": 3,
+                "label": "150",
+                "value": 150,
+                "skip": ""
+              },
+               {
+                "id": 4,
+                "label": "custom_amount",
+                "value": "",
+                "skip": "custom_amount"
+              }
+            ]
+          },
+          "order_in_variable": 3,
+          "min_length": 0,
+          "max_length": 50
+}
+
+###4
+POST http://localhost:8000/api/ussd/variable/create
+content-type: application/json
+
+{
+          "name": "custom_amount",
+          "event_id":1,
+          "user_id":1,
+          "description": "Please enter the amount you wish to donate",
+          "input_type": "decimals",
+          "hidden_text": true,
+          "required": 1,
+          "options": {},
+          "order_in_variable": 4,
+          "min_length": 0,
+          "max_length": 50
+}
+###5
+
+POST http://localhost:8000/api/ussd/variable/create
+content-type: application/json
+
+{
+          "name": "procede_payment",
+          "event_id":1,
+          "user_id":1,
+          "description": "You are about to donate GH:amount from your momo account\ntowards the :eventName\nTransfer fee GH :fee",
+          "input_type": "single",
+          "hidden_text": true,
+          "required": 1,
+          "options": {
+            "type": "int",
+            "items": [
+              {
+                "id": 1,
+                "label": "Yes",
+                "value": "1",
+                "skip": "thank_you"
+              }
+              ,
+              {
+                "id": 2,
+                "label": "No",
+                "value": "2",
+                "skip": "end"
+              }
+              ]
+          },
+          "order_in_variable": 5,
+          "min_length": 0,
+          "max_length": 50
+}
+
+
+###
+POST http://localhost:8000/api/ussd/variable/create
+content-type: application/json
+
+{
+          "name": "thank_you",
+          "event_id":1,
+          "user_id":1,
+          "description": "Thank you for you using event manage.",
+          "input_type": "plain",
+          "hidden_text": true,
+          "required": 1,
+          "options": {},
+          "order_in_variable": 6 ,
+          "min_length": 0,
+          "max_length": 50
+}
+
+###
+"""
+1. enter code
+.1 sort variable using the order_in_variable in acending order.
+.2 if is FIRST time choose the the 0 index that wil be the first in the list.
+.3 then add the next variable to the current._field in the user session 
+2. check current variable to display
+2.2 check if that variable is hidden and skip to the next. 
+2.1 check the variable input type and display in that order.
+2.3 if tht variable is single input_type check the options for for type and a skip to.. 
+3. choose selection or cutom enter value.
+4. 
+"""
