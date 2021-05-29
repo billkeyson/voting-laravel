@@ -15,6 +15,9 @@ Route::get('/',"WelcomeController@index")->name('welcome');
 Route::get('/category/{eventType?}/{eventId}',"WelcomeController@categories")->name('welcome.categories');
 Route::get('/nominee/{eventType?}/{eventId}',"WelcomeController@nominees")->name('welcome.nominees');
 
+Route::get('/nominee/{eventType?}/{nomineeId?}/details',"WelcomeController@nomineesDetails")->name('welcome.nominees.datails');
+
+
 
 Auth::routes();
 
