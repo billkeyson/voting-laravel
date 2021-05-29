@@ -7,4 +7,9 @@ use Illuminate\Http\Request;
 class VoteController extends Controller
 {
     //
+
+    public function index(){
+
+        
+    }
 }
