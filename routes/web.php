@@ -11,12 +11,46 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/',"WelcomeController@index")->name('welcome');
+Route::get('/category/{eventType?}/{eventId}',"WelcomeController@categories")->name('welcome.categories');
+Route::get('/nominee/{eventType?}/{eventId}',"WelcomeController@nominees")->name('welcome.nominees');
+
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/api/ussd', 'UssdController@ussdNalodWebhook')->name('nalo.hook');
 Route::post('/api/ussd/variable/create', 'UssdTemplateController@create')->name('template.create');
+// Dashboard
+Route::group(['prefix'=>'dashboard','middleware'=>['auth']],function () {
+    
+    Route::get('/','DashboardController@index')->name('dashboard.index');
+
+    // Events
+    Route::get('event','EventsController@index')->name('event.index');
+    Route::get('event/create','EventsController@create')->name('event.create');
+    Route::post('event/create','EventsController@store')->name('event.store');
+
+    // Category
+    Route::get('category/{eventId}','CategoryController@index')->name('category.index');
+    Route::get('category/{catId}/create','CategoryController@create')->name('category.create');
+    Route::post('category/store/{eventId}','CategoryController@store')->name('category.store');
+
+
+    // Nominees
+    Route::get('nominee/create','NomineeController@create')->name('nominee.create');
+    Route::get('nominee/{eventId}','NomineeController@index')->name('nominee.index');
+    Route::post('nominee/store/{eventId}/{catId?}','NomineeController@store')->name('nominee.store');
+    
+
+
+     // Donation
+     Route::get('donate/{eventId}','NomineeController@index')->name('donate.index');
+     Route::get('donate/create','EventsController@create')->name('donate.create');
+
+
+
+});
+
+
+    
