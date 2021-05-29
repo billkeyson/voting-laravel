@@ -17,7 +17,7 @@
         <div class="card-body">
 
             <h3 class="card-title" style="font-weight: 9000;"><a
-                href="{{ route('welcome.nominees', ['eventType' => $nominee->name, 'eventId' => $nominee->id]) }}"
+                href="{{ route('welcome.nominees.datails', ['eventType' => $nominee->event->event_type, 'nomineeId' => $nominee->id]) }}"
                 class="links">{{ $nominee->name }}</a>
             </h3>
 

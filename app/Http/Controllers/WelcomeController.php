@@ -36,11 +36,30 @@ class WelcomeController extends Controller
         if ($eventType != null && $eventType=='awards')
         {
             $awards = ['Events','Categories','Nominee'];
+            $eventName = $eventName->category->name;
+
+        }
+        else{
+            $eventName = $eventName->name;
         }
         $nominees = Nominee::where('event_id',$eventId)->get();
+
         // dd($categories[0]->event->name);
 
         
-        return view('nominees', ['nominees'=>$nominees,'eventName'=> $eventName->name,'jumbotronList'=>$awards]);
+        return view('nominees', ['nominees'=>$nominees,'eventName'=> $eventName,'jumbotronList'=>$awards]);
+    }
+
+
+    public function nomineesDetails($eventtype=null,$nomineeId){
+        $nominee = Nominee::findOrFail($nomineeId);
+        if($nominee->category!=null)
+        {
+            $eventName = $nominee->category->name;
+        }else{
+            $eventName = $nominee->event->name;
+        }
+        $unit_cost = $nominee->event->unit_cost;
+        return view('nomineedetails',['nominee'=>$nominee,'eventName'=>$eventName,'unitCost'=>$unit_cost]);
     }
 }
