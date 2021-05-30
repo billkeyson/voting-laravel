@@ -205,3 +205,18 @@ content-type: application/json
 3. choose selection or cutom enter value.
 4. 
 """
+
+###
+POST https://api.paystack.co/charge
+Authorization: Bearer sk_test_ebe050b2b677333c9011fb0cd07b866f259549c3
+Content-Type: application/json
+
+{
+  "amount": 4000, 
+  "email": "customer@email.com",
+  "currency": "GHS",
+  "mobile_money": {
+    "phone" : "0551234987",
+    "provider" : "MTN"
+  }
+}
