@@ -57,3 +57,15 @@ Route::group(['prefix'=>'dashboard','middleware'=>['auth']],function () {
 
 
     
+// paystack payment 
+Route::group(['prefix'=>'payment'],function()
+{
+    Route::post('charge/{nomineeId}', 'PaymentController@charge')->name('payment.charge');
+    // otp form
+    Route::get('verify/{referenceId}', 'PaymentController@verify')->name('payment.otp');
+    // submit otp
+    Route::post('/request_otp/{reference}', 'PaymentController@send_otp')->name('payment.sendopt');
+    // This shows a status of a completed otp page
+    Route::get('verify/complete/{referenceId}', 'PaymentController@complete')->name('payment.complete');
+
+});

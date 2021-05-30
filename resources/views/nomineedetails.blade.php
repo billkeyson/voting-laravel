@@ -17,35 +17,49 @@
                 <h5 class="card-title">
                     Enter your vote details to proceed
                 </h5>
-                <form class="card-text text-center" style="padding: 10px auto 10px auto" method="POST">
-
+                <form class="card-text text-center" style="padding: 10px auto 10px auto" method="POST" action="{{route('payment.charge',['nomineeId'=>$nominee->id])}}">
+                    {{ csrf_field() }}
                     <div class="col-md-12">
 
                         <div class="form-group">
                             <label for="votesCounts">Number Of Votes</label>
-                            <input type="number" class="form-control" id="votesCounts" name="voteCounts" min="1"
+                            <input type="number" class="form-control" id="votesCounts" name="vote_counts" min="1"
                                 placeholder="Number of Votes">
                         </div>
 
-                        <div class="form-group">
-                            <label for="paymentMethod1">Select Payment Method</label>
-                            <select class="paymentMethod" id="paymentMethod1" class="form-control">
+                        <div class="form-group" id="paymentMethod">
+                            <label for="pMethod">Select Payment Method</label>
+                            <select name= "payment_method" id="pMethod" class="form-control">
                                 <option selected>Select Payment Method</option>
-                                <option value='momo'>Mobile Money</option>
+                                <option value='mobile_money'>Mobile Money</option>
                                 <option value='card'>Credit Card</option>
                             </select>
                         </div>
 
                         <div class="form-group">
                             <label for="mobilenumber">Phone Number</label>
-                            <input type="text" maxlength="10" class="form-control" id="mobilenumber"
+                            <input type="text" maxlength="10" class="form-control"
+                            name="mobilenumber"
+                             id="mobilenumber"
                                 placeholder="Mobile Number">
                         </div>
 
                         <div class="form-group" style="display: none" id="userEmail">
                             <label for="email">Email</label>
-                            <input type="text" maxlength="10" class="form-control" id="email" placeholder="examplemail.com">
+                            <input type="text" maxlength="10"  name="email" class="form-control" id="email" placeholder="examplemail.com">
                         </div>
+
+                        
+                        <div class="form-group" id="network_provider">
+                            <label for="network">Select Your Mobile Network</label>
+                            <select class="" name= "network_provider" class="form-control" id="network">
+                                <option selected>Select Mobile Network</option>
+                                <option value='mtn'>MTN</option>
+                                <option value='vod'>Vodafone</option>
+                                <option value='tgo'> Airtel/Tigo</option>
+                            </select>
+                        </div>
+
                         <div class="totalAmount">
                             <strong id="totalAount" style="font-weight: 900;">Amount GHC 0.0</strong>
                         </div>
@@ -66,13 +80,22 @@
     <script>
         // show hidden element
         const userEmail = document.getElementById("userEmail");
-        const paymentMethod = document.querySelector(".paymentMethod");
+        const paymentMethod = document.getElementById("paymentMethod");
+        const network_provider = document.getElementById("network_provider");
+
         paymentMethod.addEventListener('change', (event) => {
             if (event.target.value == 'card') {
                 if (userEmail.style.display == 'none')
+                {
                     userEmail.style.display = 'block';
-            } else {
+                }
+
+                network_provider.style.display='none';
+
+            } else if(event.target.value == 'momo') {
                 userEmail.style.display = 'none';
+                network_provider.style.display='block';
+
             }
         });
 
