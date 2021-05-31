@@ -85,9 +85,9 @@ class PaymentController extends Controller
                         'nominee_id'=>$nominee->id,
                         'amount'=>$amount,
                         'reference'=>$parse_response->data->reference,
-                        'payment_channel'=>$request->input('payment_channel'),
+                        'payment_channel'=>$request->input('network_provider'),
                         'payment_method'=>$request->input('payment_method'),
-                        'customer_mobile'=>$request->input('customer_mobile'),
+                        'customer_mobile'=>$request->input('mobilenumber'),
                         'currency'=>"GHS",
                         'status'=>"pending"
                     ]);
