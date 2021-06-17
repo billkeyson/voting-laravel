@@ -20,4 +20,9 @@ class Event extends Model
     public function nominee(){
         return $this->hasOne('App\Nominee','event_id');
     }
+
+    public function ussdtemplate(){
+        return $this->hasMany('App\UssdTemplate','event_id');
+    }
+    
 }

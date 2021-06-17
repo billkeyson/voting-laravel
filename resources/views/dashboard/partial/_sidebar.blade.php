@@ -46,8 +46,7 @@
             {{-- Ussd --}}
             <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-home"></i><span>Donation</span></a>
                 <ul class="ml-menu">
-                    <li><a href="#">Create Donation Template</a></li>
-                    <li><a href="#">View</a></li>
+                    <li><a href="{{route('donate.index')}}">Donation Template</a></li>
                 </ul>
             </li>
             

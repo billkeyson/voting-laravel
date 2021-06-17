@@ -10,6 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+// Guest Users routes
 
 Route::get('/',"WelcomeController@index")->name('welcome');
 Route::get('/category/{eventType?}/{eventId}',"WelcomeController@categories")->name('welcome.categories');
@@ -18,7 +19,7 @@ Route::get('/nominee/{eventType?}/{eventId}',"WelcomeController@nominees")->name
 Route::get('/nominee/{eventType?}/{nomineeId?}/details',"WelcomeController@nomineesDetails")->name('welcome.nominees.datails');
 
 
-
+// LOgin routes
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -48,8 +49,9 @@ Route::group(['prefix'=>'dashboard','middleware'=>['auth']],function () {
 
 
      // Donation
-     Route::get('donate/{eventId}','NomineeController@index')->name('donate.index');
-     Route::get('donate/create','EventsController@create')->name('donate.create');
+     Route::get('donation','DonateController@index')->name('donate.index');
+     Route::post('donation/store/{eventId}','DonateController@index')->name('donate.store');
+     Route::get('donation/create/{eventId}','DonateController@create')->name('donate.create');
 
 
 

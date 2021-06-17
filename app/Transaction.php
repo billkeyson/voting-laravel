@@ -11,6 +11,7 @@ class Transaction extends Model
     protected $fillable = 
     [
         'amount',
+        'total_count',
         'reference',
         'nominee_id',
         'status',

@@ -11,7 +11,16 @@
 <script src="{{asset('assets/plugins/jquery-datatable/buttons/buttons.html5.min.js')}}"></script>
 <script src="{{asset('assets/plugins/jquery-datatable/buttons/buttons.print.min.js')}}"></script>
 <script src="{{asset('assets/js/pages/tables/jquery-datatable.js')}}"></script>
-<script src="{{asset('assets/plugins/dropzone/dropzone.js')}}"></script> <!-- Dropzone Plugin Js --> 
 
 
 <script src="{{asset('assets/bundles/mainscripts.bundle.js')}}"></script><!-- Custom Js -->
+<script src="{{asset('assets/js/jquery-ui.js')}}"></script>
+
+@stack('js')
+
+{{-- <script>$(
+    $("#sortable1").sortable();)
+</script> --}}
+
+
+
