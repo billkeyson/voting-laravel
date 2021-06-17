@@ -4,8 +4,8 @@ content-type: application/json
 {
   "USERID": "cogsys",
   "MSISDN": "233001001",
-  "USERDATA": "2",
-  "MSGTYPE": false
+  "USERDATA": "*920*222",
+  "MSGTYPE": true
 }
 ###
 POST http://localhost:8000/api/ussd/variable/create

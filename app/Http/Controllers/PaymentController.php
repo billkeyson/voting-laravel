@@ -84,6 +84,7 @@ class PaymentController extends Controller
                         'event_id'=>$nominee->event->id,
                         'nominee_id'=>$nominee->id,
                         'amount'=>$amount,
+                        'total_count'=>$request->input('vote_counts'),
                         'reference'=>$parse_response->data->reference,
                         'payment_channel'=>$request->input('network_provider'),
                         'payment_method'=>$request->input('payment_method'),
@@ -108,6 +109,12 @@ class PaymentController extends Controller
             $request->session()->flash('error','Payment Failed. Please Try again !');
             return redirect()->back();
         } catch (RequestException $th) {
+            
+            $request->session()->flash('error','Payment Failed. Please Try again !');
+            return redirect()->back();
+            // dd(json_decode($th->getResponse()->getBody()));
+        }
+        catch (Exception $th) {
             
             $request->session()->flash('error','Payment Failed. Please Try again !');
             return redirect()->back();

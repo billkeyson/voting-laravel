@@ -56,4 +56,16 @@ class UssdTemplateController extends Controller
         }
         return response()->json(['status'=>4001,'messgae'=>'ussd variable failed to be created'], 401);
     }
+
+    public function reorderVariables(Request $request){
+        // dd($request->all()[0]->variableId);
+        $updateVariables = $request->all();
+
+        foreach($updateVariables as $variable){
+            $update = UssdTemplate::find($variable['variableId']);
+            $update->order_in_variable= $variable['orderNumber'];
+            $update->save();
+        }
+        return response()->json(['status'=>200,'messgae'=>'variable update successful'], 200);
+    }
 }

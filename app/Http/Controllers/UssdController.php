@@ -246,7 +246,7 @@ class UssdController extends Controller
     private function skipConditionHandler($variable){
 
 
-        $current_variable  =  $current_variable  = $variable;
+        $current_variable  = $variable;
                 // check user resonse for current variable
                  // skip is pre-cedence over hidden
                  $option = \json_decode($current_variable->options);
@@ -439,10 +439,10 @@ class UssdController extends Controller
         }
 
         // error messages
-        if($error != null)
+        if($errorMessages != null)
         {
             // system messages Keyes ['END','START','ERROR']
-            $userSessions['error_messages'] = $error;
+            $userSessions['error_messages'] = $errorMessages;
 
         }
 
