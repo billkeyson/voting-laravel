@@ -73,17 +73,19 @@ class UssdController extends Controller
     // format variable to show to user base on input type
     private function formatVariableDisplay($optionsItems)
     {
-        $displays = "";
-        // dd($optionsItems);
+        // dd($optionsItems->input_type);
+        // $displays = "";
         if($optionsItems)
         {
 
         if($optionsItems->input_type=='single')
         {
             $optionsItem = \json_decode($optionsItems->options)->items;
+            // dd($optionsItem);
             $countText = 1;
             $displays = $optionsItems->description;
             foreach($optionsItem as $label){
+                // dd($label);
                 $displays =$displays."\n{$countText}. {$label->label}";
                 $countText=$countText+1;
             }
@@ -126,7 +128,7 @@ class UssdController extends Controller
             if($findNext->current_variable)
             {
                 // current variable
-                $current_variable  = $findNext->current_variable;
+                $current_variable  = $findNext->next_variable;
                 // check user resonse for current variable
                  // skip is pre-cedence over hidden
                  $option = \json_decode($current_variable->options);
@@ -140,7 +142,7 @@ class UssdController extends Controller
                      foreach($optionsItem as $item)
                      {
                         //  Check for the selected item in the option
-                         if($responseUserData == strval($item->id)){
+                         if($responseUserData == strval($item->value)){
 
                             $value = null;
                             // check items input type and convert to the right type
@@ -187,6 +189,7 @@ class UssdController extends Controller
                             }
 
                             break;
+                            return;
                          }
                      }
  

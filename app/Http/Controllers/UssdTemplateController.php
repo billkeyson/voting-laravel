@@ -6,55 +6,64 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 use App\UssdTemplate;
+use App\Event;
+
 
 class UssdTemplateController extends Controller
 {
     //
-    public function create(Request $request){
+    public function create(Request $request,$eventId=null){
 
-        if(!$request->isjson()){
-            return response()->json(['status'=>2001,'messgae'=>'content type is application/json'], 401);
-        }
-
-        $response = Validator::make($request->all(),
-        [
-            'event_id'=>'required',
-            'user_id'=>'required',
+        // dd($request->input('input_type'));
+        $options = [];
+        Event::findOrFail($eventId);
+       
+        $request->validate(
+            [
             'name'=>'required',
             'description'=>'required|min:5',
-            'min_length'=>'required',
-            'max_length'=>'required',
-            'input_type'=>'required',
-            'order_in_variable'=>'required'
-        ]
-    );
+            'input_type'=>'required'
+            ]);
 
 
+    if($request->input('input_type')=='single'){
+        $request->validate(
+            [
+                'options'=>'required'
+            ]
+        );
+        // dd( $request->input('options')['items']);
 
-        if($response->fails()){
-            // var_dump($response->fails());
-            return response()->json(['status'=>4004,'messgae'=>'require field(s) mission'], 401);
+        $parseOptions = $request->input('options')['items'];
+        $options['type'] = $request->input('options')['type'];
+        foreach($parseOptions as $items){
+            $options['items'][] =$items;
         }
 
+        // dd($options);
+    }
+
+    // order_in_variable count
+    $order_in_variable_count  = UssdTemplate::where('event_id',$eventId)->count()+1;
+    // dd($request->all());
         $ussdtemplate =new UssdTemplate([
-            'event_id' =>$request->input('event_id'),
-            "user_id"  => $request->input('event_id'),
+            'event_id' =>$eventId,
+            "user_id"  => auth()->id(),
             "input_type"  => $request->input('input_type'),
-            'options'=>json_encode($request->input('options')),
+            'options'=> json_encode($options),
             'description'=> $request->input('description'),
             'name'=> $request->input('name'),
-            'required'=> $request->input('required',0),
+            'required'=> $request->input('required') !=null ? 1 : 0,
             'min_length'=> $request->input('min_length',0),
             'max_length'=> $request->input('max_length',10),
             'default_value'=> $request->input('default_value',''),
-            'order_in_variable'=> $request->input('order_in_variable'),
-            'hidden_text'=> $request->input('hidden_text')
+            'order_in_variable'=> $order_in_variable_count,
+            'hidden_text'=> $request->input('hidden_text') ?? 0
         ]);
+
+        $ussdtemplate->save();
+        return redirect()->back();
         
-        if($ussdtemplate->save()){
-            return response()->json(['status'=>2001,'messgae'=>'ussd variable created successfully'], 200);
-        }
-        return response()->json(['status'=>4001,'messgae'=>'ussd variable failed to be created'], 401);
     }
 
     public function reorderVariables(Request $request){

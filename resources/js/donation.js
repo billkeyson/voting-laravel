@@ -53,27 +53,27 @@ var sortable = new Sortable(el, {
 		evt.oldIndex;  // element index within parent
 	},
 
-	
+
 	// Element dragging ended
 	onEnd: function (/**Event*/evt) {
 
-        let toElements = evt.to.children
+		let toElements = evt.to.children
 		let index = 1;
-        Array.from(toElements).forEach(function(item) {
-			let variableId =parseInt($(item).attr('variableId'));
-			reorderObjects.push({variableId:variableId,orderNumber:index})
-            // console.log('Item ',item);
+		Array.from(toElements).forEach(function (item) {
+			let variableId = parseInt($(item).attr('variableId'));
+			reorderObjects.push({ variableId: variableId, orderNumber: index })
+			// console.log('Item ',item);
 			index++
-         });
+		});
 
-		axios.post('/api/ussdtemplate/reorder',reorderObjects)
-		.then(response=>{
-			// console.log(response.data)
-		}).catch(error=>{console.log(error)})
+		axios.post('/api/ussdtemplate/reorder', reorderObjects)
+			.then(response => {
+				// console.log(response.data)
+			}).catch(error => { console.log(error) })
 
-		 reorderObjects = []
+		reorderObjects = []
 		var itemEl = evt.item;  // dragged HTMLElement
-        
+
 		evt.to;    // target list
 		evt.from;  // previous list
 		evt.oldIndex;  // element's old index within old parent
@@ -86,40 +86,64 @@ var sortable = new Sortable(el, {
 
 });
 
+const variableNames = async (parameter) => {
+	// let htmlOption = ``
+	var result = await axios.get(`/api/variable/names/${parameter}`)
+	// let htmlOption = Array.from(result.data.data).forEach(item=>`<option value="${item.name}">${item.name}</option>`)
+	// console.log(result.data.data)
+	return result.data.data;
+}
 
 // add variable options
-$("#addSingleOption").on('click',(event=>{
+var index = 0;
+$("#addSingleOption").on('click', (async event => {
+
+	let urlParam = window.location.pathname.split('/')
+	const parameter = urlParam[urlParam.length - 1]
+	let options = await variableNames(parameter)
 	event.preventDefault();
 	$('.addOption').append(
-	`
+		`
 	<div class="col-md-12 mb-2">
 	<div class="row ">
-		<div class="col-md-4">
+		<div class="col-md-3">
+			<input type="hidden" value="${index+1}" name="options[items][${index}][id]" />
 			<div class="form-line">
-				<input type="text" value="" name="option.label" id="" class="form-control"
+				<input type="text" value="" name="options[items][${index}][label]" id="" class="form-control"
 					placeholder="Option Label" />
 			</div>
 		</div>
 
-		<div class="col-md-4">
+		<div class="col-md-3">
 			<div class="form-line">
-				<input type="text" value="" name="option.value" class="form-control" id=""
+				<input type="text" value="" name="options[items][${index}][value]" class="form-control" id=""
 					placeholder="Option Value" />
 			</div>
 		</div>
 
 		<div class="col-md-3">
 			<div class="form-line">
-				<select name="option.skip" class="form-control show-tick ">
-					<option>Skip Variable</option>
+				<select name="options[items][${index}][skip]" class="form-control show-tick add-options${index}">
+					<option value="">Skip</option>
 				</select>
 			</div>
 		</div>
 
-		<div class="col-md-1 d-flex justify-content-center align-items-center"
+		<div class="col-md-2">
+			<div class="form-line">
+				<select name="options[type]" class="form-control show-tick">
+					<option value="">type</option>
+					<option value="plain">Plain</option>
+					<option value="int">Integer</option>
+					<option value="decimals">Decimals</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="col-md-1 d-flex justify-content-center align-items-center removeOption"
 			style="cursor: pointer">
 			<div class="form-line">
-				<div class="demo-google-material-icon removeOption"> 
+				<div class="demo-google-material-icon"> 
 				<i class="material-icons">remove_circle</i> <span class="icon-name"></span>
 				</div>
 
@@ -127,13 +151,48 @@ $("#addSingleOption").on('click',(event=>{
 		</div>
 	</div>
 
-</div>`)
+</div>`);
+	// add options to selection for skip
+	options.forEach(item => {
+		$(`.add-options${index}`).append(`<option value="${item.name}">${item.name}</option>`)
+	})
+
+	index++;
+	// console.log(options)
 
 
-// remove single option
-$('.removeOption').on('click',event=>{
+
+	// remove single option
+$('.removeOption').on('click', event => {
 	console.log(event.target)
 	$(event.target).parent().parent().parent().parent().parent().remove()
 })
 
 }))
+
+
+
+
+// input_type display toggle
+$('.input_type').on('change', (event) => {
+	if (event.target.value == "single") {
+		$(".disableSingle").removeClass('d-none')
+		$(".disableSingle").addClass('block')
+		$(".disablePlain").addClass('d-none')
+	} else {
+		$(".disableSingle").removeClass('block')
+		$(".disableSingle").addClass('d-none')
+	}
+
+	if (event.target.value == "plain") {
+		$(".disablePlain").removeClass('d-none')
+		$(".disablePlain").addClass('block')
+
+	} else {
+		$(".disablePlain").removeClass('block')
+		$(".disablePlain").addClass('d-none')
+	}
+	// console.log(event.target.value)
+
+	// console.log(parameter)
+})

@@ -220,3 +220,6 @@ Content-Type: application/json
     "provider" : "MTN"
   }
 }
+
+###
+GET http://localhost:8000/api/variable/names/3

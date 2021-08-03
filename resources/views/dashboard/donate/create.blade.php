@@ -22,7 +22,7 @@
     @include('dashboard.partial._widget')
     <div class="row clearfix">
 
-        <div class="col-lg-6 col-md-6 col-sm-12">
+        <div class="col-lg-5 col-md-5 col-sm-12">
             <div class="card">
                 <div class="header">
                     <h2>Recents Donation Events</h2>
@@ -85,8 +85,8 @@
         </div>
 
 
-        <div class="col-lg-6 col-md-6 col-sm-12">
-            <form method="POST" action="{{ route('donate.store', ['eventId' => $donationEvent->id]) }}"
+        <div class="col-lg-7 col-md-7 col-sm-12">
+            <form method="POST" action="{{ route('template.create', ['eventId' => $donationEvent->id]) }}"
                 class="needs-validation" enctype="multipart/form-data">
                 <div class="card">
                     <div class="header">
@@ -121,15 +121,15 @@
                                         <div class="form-group">
                                             <div class="form-line">
 
-                                                <select name="type" class="form-control show-tick">
-                                                    <option>Select Input type</option>
+                                                <select name="input_type" class="form-control show-tick input_type {{ $errors->has('input_type') ? ' is-invalid' : '' }}">
+                                                    <option value="">Select Input type</option>
                                                     <option value="single">Single</option>
                                                     <option value="number">Number</option>
                                                     <option value="decimals">Decimals</option>
                                                     <option value="plain">Plain Text</option>
                                                 </select>
                                                 <div class="invalid-feedback">
-                                                    {{ $errors->first('name') }}
+                                                    {{ $errors->first('input_type') }}
                                                 </div>
 
                                             </div>
@@ -146,7 +146,7 @@
                                     <div class="col-md-4">
 
                                         <div class="form-line">
-                                            <input type="checkbox" id="checkbox_1" name="required" checked />
+                                            <input type="checkbox" id="checkbox_1" name="required" value="{{ old('required') }}"/>
                                             <label for="checkbox_1">Required</label>
                                         </div>
                                     </div>
@@ -168,9 +168,8 @@
                                             <h6>Description</h6>
                                             <div class="form-line">
                                                 <textarea name="description" value="{{ old('bio') }}"
-                                                    class="form-control {{ $errors->has('description') ? ' is-invalid' : '' }}"
-                                                    cols="4" rows="3">
-                                                                </textarea>
+                                                    class="form-control no-resize {{ $errors->has('description') ? ' is-invalid' : '' }}"
+                                                     rows="3" placeholder="Please type description"></textarea>
                                                 <div class="invalid-feedback">{{ $errors->first('description') }}
                                                 </div>
                                             </div>
@@ -181,7 +180,6 @@
 
                                 </div>
 
-                                <button class="btn btn-raised btn-primary waves-effect" type="submit">SUBMIT</button>
 
                             </div>
                         </div>
@@ -191,9 +189,9 @@
 
 
                 {{-- Single Choice --}}
-                <div class="card disableSingle">
+                <div class="card disableSingle {{$errors->has('options') ? 'd-block': 'd-none'}}">
                     <div class="header">
-                        <h2> Single Choose </h2>
+                        <h2> Single Choose :<small class="{{$errors->has('options')? 'alert alert-danger': '' }}">{{$errors->has('options') ? $errors->first('options'):''}} </small> </h2>
                     </div>
                     <div class="body">
                         <div class="row clearfix addOption">
@@ -206,7 +204,7 @@
                 </div>
 
                 {{-- Min & Max --}}
-                <div class="card disablePlain">
+                <div class="card disablePlain d-none">
                     <div class="header">
                         <h2> Max & Min </h2>
                     </div>
@@ -229,6 +227,8 @@
                         </div>
                     </div>
                 </div>
+
+                <button class="btn btn-raised btn-primary waves-effect" type="submit">SUBMIT</button>
 
             </form>
         </div>

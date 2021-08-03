@@ -24,7 +24,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/api/ussd', 'UssdController@ussdNalodWebhook')->name('nalo.hook');
-Route::post('/api/ussd/variable/create', 'UssdTemplateController@create')->name('template.create');
+Route::post('/api/ussd/variable/create/{eventId?}', 'UssdTemplateController@create')->name('template.create');
 // Dashboard
 Route::group(['prefix'=>'dashboard','middleware'=>['auth']],function () {
     

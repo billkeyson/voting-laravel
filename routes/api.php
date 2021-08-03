@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
-
+use App\Http\Controllers\Api\UssdTemplateApiController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -18,4 +18,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('ussdtemplate/reorder','UssdTemplateController@reorderVariables')->name('ussdtemplate.reorder');
+
+Route::get('variable/names/{eventId}',[UssdTemplateApiController::class,'getVariableNames'])->name('variable.names');
 
